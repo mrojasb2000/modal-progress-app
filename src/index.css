@@ -66,10 +66,37 @@
   }
 }
 
+.progress-wave {
+  animation: wave-slide 2.5s linear infinite;
+  will-change: transform;
+}
+
+@keyframes wave-slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.orbit-spin {
+  animation: orbit-rotate 3.2s linear infinite;
+  will-change: transform;
+}
+
+@keyframes orbit-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .skeleton-shimmer::after,
   .progress-neon-glow,
-  .aurora-blob {
+  .aurora-blob,
+  .progress-wave,
+  .orbit-spin {
     animation: none;
   }
 }

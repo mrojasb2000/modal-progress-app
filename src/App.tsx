@@ -1,62 +1,47 @@
 import { useState } from 'react'
-import GlassProgressModal from './GlassProgressModal'
-import ConicRingProgressModal from './ConicRingProgressModal'
-import SegmentedStepsProgressModal from './SegmentedStepsProgressModal'
-import SkeletonShimmerProgressModal from './SkeletonShimmerProgressModal'
-import AuroraProgressModal from './AuroraProgressModal'
-
-const VARIANTS = [
-  { key: 'glass', label: 'Glassmorphism', component: GlassProgressModal },
-  { key: 'ring', label: 'Anillo Conic', component: ConicRingProgressModal },
-  { key: 'steps', label: 'Pasos Segmentados', component: SegmentedStepsProgressModal },
-  { key: 'skeleton', label: 'Skeleton Shimmer', component: SkeletonShimmerProgressModal },
-  { key: 'aurora', label: 'Aurora Gradient', component: AuroraProgressModal },
-] as const
+import { ALL_VARIANTS, VariantModal } from './variants'
 
 function App() {
-  const [modalOpen, setModalOpen] = useState(false)
-  const [activeVariant, setActiveVariant] = useState<typeof VARIANTS[number]['key']>('glass')
-
-  const close = () => setModalOpen(false)
-  const Active = VARIANTS.find((variant) => variant.key === activeVariant)!.component
+  const [openKey, setOpenKey] = useState<string | null>(null)
+  const active = ALL_VARIANTS.find((variant) => variant.key === openKey) ?? null
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-slate-100 p-8">
-      <h1 className="text-4xl font-bold text-slate-900">
-        ProgressModal: 5 versiones
-      </h1>
-      <p className="max-w-xl text-center text-slate-600">
-        Propuestas basadas en tendencias de diseño: glassmorphism (Linear/Vercel), anillos
-        conic-gradient (Apple/Strava), trackers multi-paso, skeleton screens (Facebook/Uber) y
-        fondos gradient mesh.
-      </p>
+    <main className="min-h-screen bg-slate-100 p-8">
+      <header className="mx-auto max-w-5xl text-center">
+        <h1 className="text-4xl font-bold text-slate-900">
+          50 versiones de ProgressModal
+        </h1>
+        <p className="mx-auto mt-3 max-w-2xl text-slate-600">
+          Combinación de 10 modelos gráficos × 5 temas de color, inspirados en tendencias de
+          diseño actuales (glassmorphism, conic gradients estilo Apple/Strava, trackers
+          multi-paso, skeleton screens, líquidos, medidores y órbitas animadas).
+        </p>
+      </header>
 
-      <div className="flex flex-wrap justify-center gap-2">
-        {VARIANTS.map((variant) => (
+      <div className="mx-auto mt-8 grid max-w-5xl grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        {ALL_VARIANTS.map((variant) => (
           <button
             key={variant.key}
             type="button"
-            onClick={() => setActiveVariant(variant.key)}
-            className={`rounded-lg px-4 py-2 text-sm font-semibold transition-colors ${
-              activeVariant === variant.key
-                ? 'bg-indigo-600 text-white'
-                : 'bg-white text-slate-700 shadow-sm hover:bg-slate-50'
-            }`}
+            onClick={() => setOpenKey(variant.key)}
+            className="group rounded-xl border border-slate-200 bg-white p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
           >
-            {variant.label}
+            <div
+              className="h-2.5 w-full rounded-full"
+              style={{
+                background: `linear-gradient(90deg, ${variant.theme.colors[0]}, ${variant.theme.colors[1]})`,
+                boxShadow: `0 0 8px ${variant.theme.glow}`,
+              }}
+            />
+            <p className="mt-3 text-sm font-semibold text-slate-900">{variant.name}</p>
+            <p className="mt-0.5 text-xs text-slate-400">
+              {variant.theme.name} · {variant.model.name}
+            </p>
           </button>
         ))}
       </div>
 
-      <button
-        type="button"
-        onClick={() => setModalOpen(true)}
-        className="rounded-lg bg-indigo-600 px-6 py-3 font-semibold text-white shadow-md transition-colors hover:bg-indigo-700 active:bg-indigo-800"
-      >
-        Iniciar progreso
-      </button>
-
-      <Active open={modalOpen} onClose={close} />
+      {active && <VariantModal open onClose={() => setOpenKey(null)} variant={active} />}
     </main>
   )
 }
