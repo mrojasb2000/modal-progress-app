@@ -1,1 +1,75 @@
 @import "tailwindcss";
+
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: rgb(226 232 240);
+}
+
+.skeleton-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.7),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.progress-neon-glow {
+  animation: neon-pulse 2s ease-in-out infinite;
+}
+
+@keyframes neon-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(217, 70, 239, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(244, 63, 94, 0.9);
+  }
+}
+
+.aurora-blob {
+  animation: aurora-drift 12s ease-in-out infinite;
+  will-change: transform;
+}
+
+.aurora-blob-2 {
+  animation-delay: -4s;
+}
+
+.aurora-blob-3 {
+  animation-delay: -8s;
+}
+
+@keyframes aurora-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(40px, -30px) scale(1.15);
+  }
+  66% {
+    transform: translate(-30px, 25px) scale(0.95);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer::after,
+  .progress-neon-glow,
+  .aurora-blob {
+    animation: none;
+  }
+}
